@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:matrix_multiplyer_ffi/matrix_multiplyer_ffi.dart' as matrix_multiplyer_ffi;
+import 'package:matrix_multiplyer_ffi/matrix_multiplyer_ffi.dart'
+    as matrix_multiplyer_ffi;
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    sumResult = matrix_multiplyer_ffi.sum(1, 2);
-    sumAsyncResult = matrix_multiplyer_ffi.sumAsync(3, 4);
+    sumResult = matrix_multiplyer_ffi.sum(10);
   }
 
   @override

@@ -113,6 +113,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  matrix_multiplyer_ffi:
+    dependency: "direct main"
+    description:
+      path: "packages/matrix_multiplyer_ffi"
+      relative: true
+    source: path
+    version: "0.0.1"
   matrix_multiplyer_ios:
     dependency: transitive
     description:

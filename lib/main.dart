@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix_multiplyer/matrix_multiplyer.dart';
+import 'package:matrix_multiplyer_ffi/matrix_multiplyer_ffi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,6 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
   bool calculating = false;
 
   int dartResultMs = 0;
+  int nativeResultMs = 0;
+  int ffiResultMs = 0;
+
+  int dartTotal = 0;
+  int nativeTotal = 0;
+  int ffiTotal = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              const Spacer(flex: 1),
+              const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              ),
+              const SizedBox(height: 15),
               dimensionBlock(),
               dartIsolateBlock(),
+              nativeBlock(),
+              ffiBlock(),
               Align(
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -68,19 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final res = await MatrixMultiplyer().multiplyMatrices(10);
-                    print(res);
-                  },
-                  child: const Text(
-                    'call native',
-                    style: _defaultTextStyle,
-                  ),
-                ),
-              ),
+              const Spacer(flex: 3),
             ],
           ),
         ),
@@ -112,19 +115,63 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget dartIsolateBlock() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Divider(color: Colors.black),
           Text(
-            'Dart matrix multiply bench in ms: $dartResultMs',
+            'Dart matrix multiply bench in ms: $dartResultMs ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Dart total time in ms: $dartTotal ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Dart diff: ${dartTotal - dartResultMs} ms',
             style: _defaultTextStyle,
           ),
           const SizedBox(height: 5),
         ],
       );
 
-  Widget methodChannel() => Column(
+  Widget nativeBlock() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Divider(color: Colors.black),
           Text(
-            'Dart matrix multiply bench in ms: $dartResultMs',
+            'Native matrix multiply bench in ms: $nativeResultMs ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Native total time in ms: $nativeTotal ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Native diff: ${nativeTotal - nativeResultMs} ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+        ],
+      );
+
+  Widget ffiBlock() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(color: Colors.black),
+          Text(
+            'Ffi matrix multiply bench in ms: $ffiResultMs ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Ffi total time in ms: $ffiTotal ms',
+            style: _defaultTextStyle,
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Ffi diff: ${ffiTotal - ffiResultMs} ms',
             style: _defaultTextStyle,
           ),
           const SizedBox(height: 5),
@@ -147,10 +194,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _doCalculations() async {
+    final stopwatch = Stopwatch()..start();
     final dartIsolateBench =
         await compute(multiplyMatrices, sliderValue.toInt());
+    stopwatch.stop();
+    dartTotal = stopwatch.elapsedMilliseconds;
+    stopwatch.reset();
+    stopwatch.start();
+    final nativeBench =
+        await MatrixMultiplyer().multiplyMatrices(sliderValue.toInt());
+    stopwatch.stop();
+    nativeTotal = stopwatch.elapsedMilliseconds;
+    stopwatch.reset();
+    stopwatch.start();
+
+    final ffiBench = multiplyMatrices(sliderValue.toInt());
+    stopwatch.stop();
+    ffiTotal = stopwatch.elapsedMilliseconds;
+
     setState(() {
       dartResultMs = dartIsolateBench;
+      nativeResultMs = nativeBench;
+      ffiResultMs = ffiBench;
     });
   }
 
