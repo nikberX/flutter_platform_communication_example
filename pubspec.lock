@@ -99,6 +99,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  matrix_multiply_platform_view:
+    dependency: "direct main"
+    description:
+      path: "packages/matrix_multiply_platform_view"
+      relative: true
+    source: path
+    version: "0.0.1"
   matrix_multiplyer:
     dependency: "direct main"
     description:

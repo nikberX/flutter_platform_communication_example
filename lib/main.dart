@@ -1,8 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:matrix_multiply_platform_view/matrix_multiply_platform_view.dart';
 import 'package:matrix_multiplyer/matrix_multiplyer.dart';
 import 'package:matrix_multiplyer_ffi/matrix_multiplyer_ffi.dart';
 
@@ -73,6 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
               dartIsolateBlock(),
               nativeBlock(),
               ffiBlock(),
+              Center(
+                child: SizedBox(
+                  height: 53,
+                  width: 250,
+                  child: NativeMatrixMultiplyView(),
+                ),
+              ),
               Align(
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -208,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
     stopwatch.reset();
     stopwatch.start();
 
-    final ffiBench = multiplyMatrices(sliderValue.toInt());
+    final ffiBench = multiplyMatricesFfi(sliderValue.toInt());
     stopwatch.stop();
     ffiTotal = stopwatch.elapsedMilliseconds;
 

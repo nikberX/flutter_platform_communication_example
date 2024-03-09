@@ -12,12 +12,8 @@ import 'dart:isolate';
 
 import 'matrix_multiplyer_ffi_bindings_generated.dart';
 
-/// A very short-lived native function.
-///
-/// For very short-lived functions, it is fine to call them on the main isolate.
-/// They will block the Dart execution while running the native function, so
-/// only do this for native functions which are guaranteed to be short-lived.
-int sum(int dimensions) => _bindings.multiplyMatrices(dimensions);
+int multiplyMatricesFfi(int dimensions) =>
+    _bindings.multiplyMatrices(dimensions);
 
 const String _libName = 'matrix_multiplyer_ffi';
 

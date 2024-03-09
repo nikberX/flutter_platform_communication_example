@@ -9,14 +9,19 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.EventChannel.EventSink;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
+import java.util.Timer
 
 /** MatrixMultiplyerAndroidPlugin */
-class MatrixMultiplyerAndroidPlugin: FlutterPlugin, MethodCallHandler {
+class MatrixMultiplyerAndroidPlugin: FlutterPlugin, MethodCallHandler, StreamHandler {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
+  private var eventSink: EventSink? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "matrix_multiplyer_android")
@@ -31,10 +36,22 @@ class MatrixMultiplyerAndroidPlugin: FlutterPlugin, MethodCallHandler {
       result.notImplemented()
     }
   }
-  
-  fun multiplyMatricesCall(dimensions: Int): Long {
-    var matrix1 = Array(dimensions) { IntArray(dimensions) { 0 } }
-    var matrix2 = Array(dimensions) { IntArray(dimensions) { 0 } }
+
+
+    // EventChannel.StreamHandler methods
+    override fun onListen(arguments: Any?, eventSink: EventSink?) {
+        // TODO: attach event sink
+        this.eventSink = eventSink
+    }
+
+    override fun onCancel(arguments: Any?) {
+        // TODO: detach event sink
+        eventSink = null
+    }
+
+    fun multiplyMatricesCall(dimensions: Int): Long {
+      var matrix1 = Array(dimensions) { IntArray(dimensions) { 0 } }
+      var matrix2 = Array(dimensions) { IntArray(dimensions) { 0 } }
 
     fillMatrix(matrix1, dimensions)
     fillMatrix(matrix2, dimensions)

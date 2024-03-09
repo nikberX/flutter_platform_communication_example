@@ -10,11 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  matrix_multiply_platform_view:
+    path: packages/matrix_multiply_platform_view
   matrix_multiplyer:
     path: packages/matrix_multiplyer/matrix_multiplyer
   matrix_multiplyer_ffi:
     path: packages/matrix_multiplyer_ffi
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
