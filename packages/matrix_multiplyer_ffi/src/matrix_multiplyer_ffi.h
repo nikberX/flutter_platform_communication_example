@@ -15,6 +15,4 @@
 #define FFI_PLUGIN_EXPORT
 #endif
 
-
-
 FFI_PLUGIN_EXPORT intptr_t multiplyMatrices(intptr_t dimensions);

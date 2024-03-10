@@ -2,7 +2,6 @@
 name: MatrixMultiplyerFfiBindings
 description: |
   Bindings for `src/matrix_multiplyer_ffi.h`.
-
   Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
 output: 'lib/matrix_multiplyer_ffi_bindings_generated.dart'
 headers:

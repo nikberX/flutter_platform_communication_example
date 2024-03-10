@@ -32,6 +32,7 @@ class MatrixMultiplyPlatformViewPlugin: FlutterPlugin {
 
 class ButtonPlatformViewFactory(private val flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) :
   PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+  
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     return ButtonPlatformView(context!!, viewId, args as String, flutterPluginBinding)
   }

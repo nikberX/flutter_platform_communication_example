@@ -20,6 +20,16 @@ abstract class MatrixMultiplyerPlatform extends PlatformInterface {
   Future<int> multiplyMatrices(int dimensions) => throw UnimplementedError(
         'MatrixMultiplyerPlatform has not been implemented',
       );
+
+  /// Вызывает result.error на стороне натива
+  Future<int> multiplyMatricesError(int dimensions) => throw UnimplementedError(
+        'MatrixMultiplyerPlatform has not been implemented',
+      );
+
+  /// Периодически возвращает инерементируемые значения
+  Stream<int> timerStream() => throw UnimplementedError(
+        'MatrixMultiplyerPlatform has not been implemented',
+      );
 }
 
 class _PlaceholderImplementation extends MatrixMultiplyerPlatform {}

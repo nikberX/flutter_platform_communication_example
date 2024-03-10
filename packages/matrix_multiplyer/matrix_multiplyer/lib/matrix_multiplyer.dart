@@ -8,4 +8,6 @@ class MatrixMultiplyer {
 
   Future<int> multiplyMatrices(int dimensions) =>
       _platform.multiplyMatrices(dimensions);
+
+  Stream<int> timerStream() => _platform.timerStream();
 }

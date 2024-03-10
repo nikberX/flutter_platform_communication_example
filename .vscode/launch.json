@@ -7,18 +7,21 @@
         {
             "name": "platform_communication_example",
             "request": "launch",
+            "program": "lib/main.dart",
             "type": "dart"
         },
         {
             "name": "platform_communication_example (profile mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main.dart",
             "flutterMode": "profile"
         },
         {
             "name": "platform_communication_example (release mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main.dart",
             "flutterMode": "release"
         }
     ]

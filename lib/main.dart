@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -53,6 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int nativeTotal = 0;
   int ffiTotal = 0;
 
+  int get dimensions => sliderValue.toInt();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,11 +78,20 @@ class _MyHomePageState extends State<MyHomePage> {
               dartIsolateBlock(),
               nativeBlock(),
               ffiBlock(),
+              StreamBuilder(
+                stream: MatrixMultiplyer().timerStream(),
+                builder: (ctx, snapshot) => Center(
+                  child: Text(
+                    'Event channel count: ${snapshot.data.toString()}',
+                    style: _defaultTextStyle,
+                  ),
+                ),
+              ),
               Center(
                 child: SizedBox(
                   height: 53,
                   width: 250,
-                  child: NativeMatrixMultiplyView(),
+                  child: NativeClickerView(),
                 ),
               ),
               Align(
@@ -205,27 +215,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _doCalculations() async {
+    // dart benchmark
     final stopwatch = Stopwatch()..start();
-    final dartIsolateBench =
-        await compute(multiplyMatrices, sliderValue.toInt());
+    final dartIsolateBench = await compute(multiplyMatrices, dimensions);
     stopwatch.stop();
     dartTotal = stopwatch.elapsedMilliseconds;
-    stopwatch.reset();
-    stopwatch.start();
-    final nativeBench =
-        await MatrixMultiplyer().multiplyMatrices(sliderValue.toInt());
-    stopwatch.stop();
-    nativeTotal = stopwatch.elapsedMilliseconds;
-    stopwatch.reset();
-    stopwatch.start();
-
-    final ffiBench = multiplyMatricesFfi(sliderValue.toInt());
-    stopwatch.stop();
-    ffiTotal = stopwatch.elapsedMilliseconds;
-
     setState(() {
       dartResultMs = dartIsolateBench;
+    });
+
+    // native benchmark
+    stopwatch.reset();
+    stopwatch.start();
+    final nativeBench = await MatrixMultiplyer().multiplyMatrices(dimensions);
+    stopwatch.stop();
+    nativeTotal = stopwatch.elapsedMilliseconds;
+    setState(() {
       nativeResultMs = nativeBench;
+    });
+
+    // ffi benchmark
+    stopwatch.reset();
+    stopwatch.start();
+    final ffiBench = multiplyMatricesFfi(dimensions);
+    stopwatch.stop();
+    ffiTotal = stopwatch.elapsedMilliseconds;
+    setState(() {
       ffiResultMs = ffiBench;
     });
   }
@@ -274,5 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-const TextStyle _defaultTextStyle =
-    TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle _defaultTextStyle = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
